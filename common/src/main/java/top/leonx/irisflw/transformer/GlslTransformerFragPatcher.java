@@ -31,6 +31,7 @@ import io.github.douira.glsl_transformer.ast.transform.SingleASTTransformer;
 import io.github.douira.glsl_transformer.ast.traversal.ASTBaseVisitor;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 import io.github.douira.glsl_transformer.parser.ParseShape;
+import net.irisshaders.iris.helpers.StringPair;
 import net.irisshaders.iris.shaderpack.parsing.CommentDirective;
 import net.irisshaders.iris.shaderpack.parsing.CommentDirectiveParser;
 import net.irisshaders.iris.shaderpack.preprocessor.JcppProcessor;
