@@ -6,13 +6,13 @@ import org.joml.Vector3f;
 
 public class CubiodBuilderTriView implements TriView {
     Vector3f[] pos;
-    Vector2f[] uvs = new Vector2f[4];
+    Vector2f[] uvs = new Vector2f[] { new Vector2f(), new Vector2f(), new Vector2f(), new Vector2f() };
     public void setup(Vector3f[] pos,float minU, float maxU, float minV, float maxV){
         this.pos = pos;
-        uvs[0] = new Vector2f(maxU, minV);
-        uvs[1] = new Vector2f(minU, minV);
-        uvs[2] = new Vector2f(minU, maxV);
-        uvs[3] = new Vector2f(maxU, maxV);
+        uvs[0].set(maxU, minV);
+        uvs[1].set(minU, minV);
+        uvs[2].set(minU, maxV);
+        uvs[3].set(maxU, maxV);
     }
     @Override
     public float x(int i) {

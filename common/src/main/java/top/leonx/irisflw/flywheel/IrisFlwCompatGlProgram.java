@@ -10,6 +10,7 @@ import net.irisshaders.iris.shadows.ShadowRenderer;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -60,6 +61,11 @@ public class IrisFlwCompatGlProgram extends IrisFlwCompatGlProgramBase {
     private int baseVertex;
     private int baseInstance;
 
+    // Cache atlas size to avoid TextureManager lookups per draw
+    private ResourceLocation cachedTextureId;
+    private int cachedAtlasWidth = 2048;
+    private int cachedAtlasHeight = 2048;
+
     @Override
     public void setAdditionUniform(Material material, int baseVertex, int baseInstance) {
         this.material = material;
@@ -77,21 +83,29 @@ public class IrisFlwCompatGlProgram extends IrisFlwCompatGlProgramBase {
             setModelViewMatrix((Matrix4f) CapturedRenderingState.INSTANCE.getGbufferModelView());
         }
 
+        uploadUniforms();
+    }
+
+    @Override
+    public void uploadUniforms() {
         uniformFlwBaseVertex.set(baseVertex);
         uniformFlwInstance.set(baseInstance);
 
         if(material != null)
         {
-            var tex = Minecraft.getInstance().getTextureManager().getTexture(material.texture());
-            if (tex instanceof TextureAtlas atlas)
-            {
-                uniformAtlasSize.set(
-                        ((TextureAtlasAccessor) atlas).callGetWidth(),
-                        ((TextureAtlasAccessor) atlas).callGetHeight()
-                );
-            }else{
-                uniformAtlasSize.set(2048, 2048);
+            ResourceLocation textureId = material.texture();
+            if (!textureId.equals(cachedTextureId)) {
+                cachedTextureId = textureId;
+                var tex = Minecraft.getInstance().getTextureManager().getTexture(textureId);
+                if (tex instanceof TextureAtlas atlas) {
+                    cachedAtlasWidth = ((TextureAtlasAccessor) atlas).callGetWidth();
+                    cachedAtlasHeight = ((TextureAtlasAccessor) atlas).callGetHeight();
+                } else {
+                    cachedAtlasWidth = 2048;
+                    cachedAtlasHeight = 2048;
+                }
             }
+            uniformAtlasSize.set(cachedAtlasWidth, cachedAtlasHeight);
 
             int packedFogAndCutout = MaterialEncoder.packUberShader(material);
             int packedMaterialProperties = MaterialEncoder.packProperties(material);
