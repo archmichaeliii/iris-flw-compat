@@ -1,6 +1,5 @@
 package top.leonx.irisflw.mixin.flw;
 
-import dev.engine_room.flywheel.backend.compile.core.Compilation;
 import dev.engine_room.flywheel.backend.compile.core.Compile;
 import dev.engine_room.flywheel.backend.gl.shader.ShaderType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,17 +23,9 @@ public class MixinProgramStitcher<K> {
         if (this.compilers.containsKey(shaderType)) {
             throw new IllegalArgumentException("Duplicate shader type: " + shaderType);
         } else {
-            if(shaderType==ShaderType.VERTEX)
-                compilerBuilder.onCompile(this::PatchShader);
             this.compilers.put(shaderType, compilerBuilder);
             cir.setReturnValue((Compile.ProgramStitcher<K>)(Object)this);
             cir.cancel();
-        }
-    }
-
-    private void PatchShader(K k, Compilation compilation) {
-        if(k == ShaderType.VERTEX){
-            System.out.println("Patching vertex shader");
         }
     }
 }

@@ -6,7 +6,6 @@ import net.irisshaders.iris.vertices.IrisVertexFormats;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.joml.Vector2i;
 import org.lwjgl.system.MemoryUtil;
-import top.leonx.irisflw.IrisFlw;
 
 public class IrisVertexReader implements VertexList {
 

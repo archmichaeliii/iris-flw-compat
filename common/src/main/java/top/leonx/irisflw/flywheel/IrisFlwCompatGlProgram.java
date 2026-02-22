@@ -113,14 +113,14 @@ public class IrisFlwCompatGlProgram extends IrisFlwCompatGlProgramBase {
         uniformIrisProjMat.set(projectionMatrix);
     }
 
+    private final Matrix3f normalMatrixBuf = new Matrix3f();
+
     public void setModelViewMatrix(Matrix4f modelView) {
         iris_uniformModelViewMat.set(modelView);
 
         if (this.uniformNormalMatrix != null) {
-            Matrix4f normalMatrix = new Matrix4f(modelView);
-            normalMatrix.invert();
-            normalMatrix.transpose();
-            this.uniformNormalMatrix.set(new Matrix3f(normalMatrix));
+            modelView.normal(normalMatrixBuf);
+            this.uniformNormalMatrix.set(normalMatrixBuf);
         }
     }
 }

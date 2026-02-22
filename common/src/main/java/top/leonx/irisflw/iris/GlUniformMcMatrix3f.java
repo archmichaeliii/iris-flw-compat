@@ -16,7 +16,7 @@ public class GlUniformMcMatrix3f extends GlUniform<Matrix3f> {
 
     public void set(Matrix3f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
-            FloatBuffer buf = stack.callocFloat(12);
+            FloatBuffer buf = stack.callocFloat(9);
             value.get(buf);
 
             GL30C.glUniformMatrix3fv(this.index, false, buf);

@@ -175,6 +175,9 @@ public class IrisInstancedDrawManager extends DrawManager<InstancedInstancer<?>>
             var environment = groupKey.environment();
 
             var program = programs.get(groupKey.instanceType(), environment.contextShader(), material, mode, isShadow);
+            if (program == null) {
+                continue;
+            }
             program.setAdditionUniform(material, drawCall.mesh().baseVertex(), 0);
             program.bind();
 
