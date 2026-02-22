@@ -6,7 +6,6 @@ import net.irisshaders.iris.vertices.IrisVertexFormats;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.joml.Vector2i;
 import org.lwjgl.system.MemoryUtil;
-import top.leonx.irisflw.IrisFlw;
 
 public class IrisVertexReader implements VertexList {
 
@@ -89,9 +88,15 @@ public class IrisVertexReader implements VertexList {
     }
 
     public Vector2i mcEntity(int index) {
-        var renderEntity = MemoryUtil.memGetShort(this.ptr + (long)index * STRIDE + 32L);
-        var renderedBlockEntity = MemoryUtil.memGetShort(this.ptr + (long)index * STRIDE + 34L);
-        return new Vector2i(renderEntity, renderedBlockEntity);
+        return new Vector2i(mcEntityX(index), mcEntityY(index));
+    }
+
+    public short mcEntityX(int index) {
+        return MemoryUtil.memGetShort(this.ptr + (long)index * STRIDE + 32L);
+    }
+
+    public short mcEntityY(int index) {
+        return MemoryUtil.memGetShort(this.ptr + (long)index * STRIDE + 34L);
     }
 
     public float midU(int index) {

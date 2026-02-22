@@ -39,6 +39,7 @@ import top.leonx.irisflw.transformer.GlslTransformerFragPatcher;
 import top.leonx.irisflw.transformer.GlslTransformerVertPatcher;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.GL_TRUE;
@@ -171,10 +172,9 @@ public class IrisProgramLinker extends ProgramLinker {
         }
         return null;
     }
-    static int programCounter;
+    private static final AtomicInteger programCounter = new AtomicInteger();
     private String getFlwShaderName(String shaderName, boolean isShadow) {
-        String randomId = String.valueOf(programCounter);
-        programCounter++;
+        String randomId = String.valueOf(programCounter.getAndIncrement());
         if (isShadow)
             return String.format("shadow_flw_%s_%s", shaderName, randomId);
         else

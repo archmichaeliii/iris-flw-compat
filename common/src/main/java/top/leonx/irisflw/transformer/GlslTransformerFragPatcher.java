@@ -2,7 +2,6 @@ package top.leonx.irisflw.transformer;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
-import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.Version;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
@@ -16,7 +15,6 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.Declarati
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.FunctionDefinition;
 import io.github.douira.glsl_transformer.ast.node.statement.CompoundStatement;
-import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.ExpressionStatement;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.BuiltinNumericTypeSpecifier;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
@@ -32,14 +30,12 @@ import io.github.douira.glsl_transformer.ast.transform.JobParameters;
 import io.github.douira.glsl_transformer.ast.transform.SingleASTTransformer;
 import io.github.douira.glsl_transformer.ast.traversal.ASTBaseVisitor;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
-import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.parser.ParseShape;
 import net.irisshaders.iris.helpers.StringPair;
 import net.irisshaders.iris.shaderpack.parsing.CommentDirective;
 import net.irisshaders.iris.shaderpack.parsing.CommentDirectiveParser;
 import net.irisshaders.iris.shaderpack.preprocessor.JcppProcessor;
 import top.leonx.irisflw.IrisFlw;
-import top.leonx.irisflw.flywheel.RenderLayerEventStateManager;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -84,10 +80,7 @@ public class GlslTransformerFragPatcher {
             GLSLParser::compoundStatement,
             ASTBuilder::visitCompoundStatement);
 
-    private static final Pattern boxCoordDetector = Pattern.compile("BoxCoord");
-
     private static final Pattern versionPattern = Pattern.compile("^.*#version\\s+(\\d+)", Pattern.DOTALL);
-    private static final boolean useLightSector = false;
 
     public GlslTransformerFragPatcher() {
         transformer = new SingleASTTransformer<>() {
@@ -107,7 +100,7 @@ public class GlslTransformerFragPatcher {
                 var versionNum = Integer.parseInt(matcher.group(1));
                 if (versionNum < 330) {
                     versionNum = 330;
-                    var ignored = matcher.replaceAll("#version 330");
+                    input = matcher.replaceAll("#version 330");
                     IrisFlw.LOGGER.warn("GLSL version is lower than 330, set to 330");
                 }
                 transformer.getLexer().version = Version.fromNumber(versionNum);

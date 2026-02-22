@@ -33,9 +33,8 @@ public class IrisExtVertexView extends AbstractVertexView {
             int midBlock = src.getMidBlock(i);
             midBlock = repackMidBlock(midBlock);
 
-            var mcEntity = src.mcEntity(i);
-            short entityX = (short) mcEntity.x;
-            short entityY = (short) mcEntity.y;
+            short entityX = src.mcEntityX(i);
+            short entityY = src.mcEntityY(i);
 
             midU(i, midU);
             midV(i, midV);

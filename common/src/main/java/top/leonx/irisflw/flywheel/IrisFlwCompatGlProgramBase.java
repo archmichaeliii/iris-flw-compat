@@ -13,6 +13,12 @@ public abstract class IrisFlwCompatGlProgramBase extends GlProgram {
 
     public abstract void bind();
 
+    /**
+     * Upload only per-draw uniforms without re-binding the program.
+     * Used when the same program is reused for consecutive draw calls.
+     */
+    public abstract void uploadUniforms();
+
     public abstract void clear();
 
     public abstract void setProjectionMatrix(Matrix4f projectionMatrix);
@@ -34,6 +40,11 @@ public abstract class IrisFlwCompatGlProgramBase extends GlProgram {
 
         @Override
         public void bind() {
+
+        }
+
+        @Override
+        public void uploadUniforms() {
 
         }
 
